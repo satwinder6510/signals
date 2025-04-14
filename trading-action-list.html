@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoTrend Alpha | Daily Actions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+        }
+        .action-card {
+            transition: all 0.3s ease;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        .buy-action {
+            border-left: 4px solid #10b981;
+        }
+        .sell-action {
+            border-left: 4px solid #ef4444;
+        }
+        .hold-action {
+            border-left: 4px solid #f59e0b;
+        }
+        .portfolio-card {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .positive {
+            color: #10b981;
+        }
+        .negative {
+            color: #ef4444;
+        }
+        .nav-item {
+            position: relative;
+        }
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+    </style>
+</head>
+<body class="gradient-bg text-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="px-6 py-4 bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-md border-b border-indigo-900">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-chart-line text-indigo-500 text-2xl"></i>
+                <span class="text-xl font-bold">CryptoTrend Alpha</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="nav-item hover:text-indigo-400 transition">Dashboard</a>
+                <a href="#" class="nav-item active hover:text-indigo-400 transition">Daily Actions</a>
+                <a href="#" class="nav-item hover:text-indigo-400 transition">Portfolio</a>
+                <a href="#" class="nav-item hover:text-indigo-400 transition">Settings</a>
+                <a href="#" class="nav-item hover:text-indigo-400 transition">Help</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="p-2 bg-gray-800 rounded-full">
+                    <i class="fas fa-bell text-gray-400"></i>
+                </div>
+                <div class="h-8 w-8 bg-indigo-600 rounded-full flex items-center justify-center">
+                    <span class="font-medium">JS</span>
+                </div>
+            </div>
+            <button class="md:hidden text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold mb-2">Daily Trading Actions</h1>
+                <p class="text-gray-400">Last updated: April 14, 2025 • 09:30 AM IST</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex space-x-4">
+                <button class="flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Refresh</span>
+                </button>
+                <div class="relative">
+                    <button class="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg">
+                        <i class="fas fa-robot"></i>
+                        <span>Auto-Execute All</span>
+                    </button>
+                    <div class="absolute top-full right-0 mt-2 bg-indigo-900 text-xs p-2 rounded shadow-lg">
+                        Pro feature
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Card -->
+        <div class="bg-gray-800 bg-opacity-60 rounded-xl border border-indigo-900 p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                    <p class="text-gray-400 mb-1">Today's Actions</p>
+                    <p class="text-2xl font-bold">5 Actions</p>
+                </div>
+                <div>
+                    <p class="text-gray-400 mb-1">Portfolio Value</p>
+                    <p class="text-2xl font-bold">₹438,620</p>
+                </div>
+                <div>
+                    <p class="text-gray-400 mb-1">Today's P&L</p>
+                    <p class="text-2xl font-bold positive">+₹12,540 <span class="text-sm">(+2.9%)</span></p>
+                </div>
+                <div>
+                    <p class="text-gray-400 mb-1">Monthly P&L</p>
+                    <p class="text-2xl font-bold positive">+₹42,180 <span class="text-sm">(+10.6%)</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Required Actions -->
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold">Today's Required Actions</h2>
+                <span class="text-sm px-3 py-1 bg-indigo-900 rounded-full">5 actions pending</span>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Buy Action Card -->
+                <div class="action-card buy-action bg-gray-800 bg-opacity-60 rounded-xl border border-indigo-900 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="flex items-center mb-4 md:mb-0">
+                                <div class="w-10 h-10 rounded-full bg-green-900 bg-opacity-30 flex items-center justify-center mr-4">
+                                    <i class="fas fa-arrow-down text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold">Buy BTC</h3>
+                                    <p class="text-gray-400">Convert 0.25 ETH to BTC</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6 w-full md:w-auto">
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Amount</p>
+                                    <p class="font-medium">~0.00425 BTC</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Market Price</p>
+                                    <p class="font-medium">₹1,648.5/ETH</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Estimated Value</p>
+                                    <p class="font-medium">₹29,550</p>
+                                </div>
+                                <div>
+                                    <button class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg w-full md:w-auto">
+                                        Execute Buy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sell Action Card -->
+                <div class="action-card sell-action bg-gray-800 bg-opacity-60 rounded-xl border border-indigo-900 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="flex items-center mb-4 md:mb-0">
+                                <div class="w-10 h-10 rounded-full bg-red-900 bg-opacity-30 flex items-center justify-center mr-4">
+                                    <i class="fas fa-arrow-up text-red-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold">Sell DOGE</h3>
+                                    <p class="text-gray-400">Sell all DOGE position (108 DOGE)</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6 w-full md:w-auto">
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Amount</p>
+                                    <p class="font-medium">108 DOGE</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Market Price</p>
+                                    <p class="font-medium">₹0.16242</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Estimated Value</p>
+                                    <p class="font-medium">₹17.54</p>
+                                </div>
+                                <div>
+                                    <button class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg w-full md:w-auto">
+                                        Execute Sell
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buy Action Card -->
+                <div class="action-card buy-action bg-gray-800 bg-opacity-60 rounded-xl border border-indigo-900 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="flex items-center mb-4 md:mb-0">
+                                <div class="w-10 h-10 rounded-full bg-green-900 bg-opacity-30 flex items-center justify-center mr-4">
+                                    <i class="fas fa-arrow-down text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold">Buy SOL</h3>
+                                    <p class="text-gray-400">Increase SOL position (+0.5 SOL)</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6 w-full md:w-auto">
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Amount</p>
+                                    <p class="font-medium">0.5 SOL</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Market Price</p>
+                                    <p class="font-medium">₹131.26</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Estimated Value</p>
+                                    <p class="font-medium">₹65.63</p>
+                                </div>
+                                <div>
+                                    <button class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg w-full md:w-auto">
+                                        Execute Buy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sell Action Card -->
+                <div class="action-card sell-action bg-gray-800 bg-opacity-60 rounded-xl border border-indigo-900 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="flex items-center mb-4 md:mb-0">
+                                <div class="w-10 h-10 rounded-full bg-red-900 bg-opacity-30 flex items-center justify-center mr-4">
+                                    <i class="fas fa-arrow-up text-red-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold">Sell LINK</h3>
+                                    <p class="text-gray-400">Reduce LINK position (-1.5 LINK)</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6 w-full md:w-auto">
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Amount</p>
+                                    <p class="font-medium">1.5 LINK</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Market Price</p>
+                                    <p class="font-medium">₹12.875</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Estimated Value</p>
+                                    <p class="font-medium">₹19.31</p>
+                                </div>
+                                <div>
+                                    <button class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg w-full md:w-auto">
+                                        Execute Sell
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buy Action Card -->
+                <div class="action-card buy-action bg-gray-800 bg-opacity-60 rounded-xl border border-indigo-900 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="flex items-center mb-4 md:mb-0">
+                                <div class="w-10 h-10 rounded-full bg-green-900 bg-opacity-30 flex items-center justify-center mr-4">
+                                    <i class="fas fa-arrow-down text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold">Buy TRX</h3>
+                                    <p class="text-gray-400">Add TRX to your portfolio (+150 TRX)</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6 w-full md:w-auto">
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Amount</p>
+                                    <p class="font-medium">150 TRX</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Market Price</p>
+                                    <p class="font-medium">₹0.25593</p>
+                                </div>
+                                <div class="md:text-right">
+                                    <p class="text-gray-400 text-sm">Estimated Value</p>
+                                    <p class="font-medium">₹38.39</p>
+                                </div>
+                                <div>
+                                    <button class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg w-full md:w-auto">
+                                        Execute Buy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Current Portfolio -->
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold">Your Current Portfolio</h2>
+                <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm">View detailed portfolio →</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="portfolio-card bg-gray-800 bg-opacity-60 rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center mr-3">
+                                <i class="fab fa-bitcoin text-gray-900"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Bitcoin</h3>
+                                <p class="text-xs text-gray-400">BTC</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold">0.0072 BTC</p>
+                            <p class="text-xs text-gray-400">₹118,690</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs px-2 py-1 rounded-full bg-green-900 bg-opacity-30 text-green-400">
+                            <i class="fas fa-arrow-up mr-1"></i>3.2%
+                        </span>
+                        <span class="text-xs hold-action px-2 py-1 rounded-full bg-yellow-900 bg-opacity-30 text-yellow-400">
+                            HOLD
+                        </span>
+                    </div>
+                </div>
+
+                <div class="portfolio-card bg-gray-800 bg-opacity-60 rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center mr-3">
+                                <i class="fab fa-ethereum text-gray-900"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Ethereum</h3>
+                                <p class="text-xs text-gray-400">ETH</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold">0.0720 ETH</p>
+                            <p class="text-xs text-gray-400">₹118,690</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs px-2 py-1 rounded-full bg-red-900 bg-opacity-30 text-red-400">
+                            <i class="fas fa-arrow-down mr-1"></i>7.5%
+                        </span>
+                        <span class="text-xs sell-action px-2 py-1 rounded-full bg-red-900 bg-opacity-30 text-red-400">
+                            REDUCE
+                        </span>
+                    </div>
+                </div>
+
+                <div class="portfolio-card bg-gray-800 bg-opacity-60 rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                                <i class="fas fa-chart-line text-gray-900"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Solana</h3>
+                                <p class="text-xs text-gray-400">SOL</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold">0.56 SOL</p>
+                            <p class="text-xs text-gray-400">₹73,510</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs px-2 py-1 rounded-full bg-green-900 bg-opacity-30 text-green-400">
+                            <i class="fas fa-arrow-up mr-1"></i>5.2%
+                        </span>
+                        <span class="text-xs buy-action px-2 py-1 rounded-full bg-green-900 bg-opacity-30 text-green-400">
+                            INCREASE
+                        </span>
+                    </div>
+                </div>
+
+                <div class="portfolio-card bg-gray-800 bg-opacity-60 rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center mr-3">
+                                <i class="fas fa-link text-gray-900"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Chainlink</h3>
+                                <p class="text-xs text-gray-400">LINK</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold">3.3 LINK</p>
+                            <p class="text-xs text-gray-400">₹42,490</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs px-2 py-1 rounded-full bg-red-900 bg-opacity-30 text-red-400">
+                            <i class="fas fa-arrow-down mr-1"></i>1.0%
+                        </span>
+                        <span class="text-xs sell-action px-2 py-1 rounded-full bg-red-900 bg-opacity-30 text-red-400">
+                            REDUCE
+                        </span>
+                    </div>
+                </div>
+
+                <!-- More portfolio cards would be added here -->
+            </div>
+        </div>
+
+        <!-- Strategy Explanation -->
+        <div class="bg-gray-800 bg-opacity-60 rounded-xl border border-indigo-900 p-6 mb-8">
+            <div class="flex flex-col md:flex-row items-start">
+                <div class="w-full md:w-2/3 md:pr-8">
+                    <h2 class="text-xl font-semibold mb-4">About Today's Strategy</h2>
+                    <p class="text-gray-300 mb-4">
+                        Our algorithm has detected a strong bullish trend in Bitcoin and Solana, while Ethereum is showing signs of a temporary correction. The recommended actions today are designed to:
+                    </p>
+                    <ul class="space-y-2 mb-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3"></i>
+                            <span>Increase exposure to Bitcoin, which is expected to continue its upward trend</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3"></i>
+                            <span>Add to Solana position as it's showing strong momentum</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3"></i>
+                            <span>Reduce Ethereum exposure temporarily to protect against short-term volatility</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3"></i>
+                            <span>Exit Dogecoin position completely as it's showing weakness against Bitcoin</span>
+                        </li>
+                    </ul>
+                    <div class="mb-4 md:mb-0">
+                        <a href="#" class="text-indigo-400 hover:text-indigo-300">View detailed market analysis →</a>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 mt-6 md:mt-0">
+                    <div class="bg-gray-900 bg-opacity-60 rounded-xl p-4 border border-indigo-800">
+                        <h3 class="font-semibold mb-3">Algorithm Confidence</h3>
+                        <div class="mb-4">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Bitcoin (BUY)</span>
+                                <span class="text-sm">92%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Ethereum (REDUCE)</span>
+                                <span class="text-sm">78%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Solana (BUY)</span>
+                                <span class="text-sm">86%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 86%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Dogecoin (SELL)</span>
+                                <span class="text-sm">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-red-500 h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action History -->
+        <div>
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold">Recent Actions History</h2>
+                <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm">View all history →</a>
+            </div>
+
+            <div class="bg-gray-800 bg-opacity-60 rounded-xl border border-indigo-900 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-gray-900 bg-opacity-60">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Action</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Asset</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Value</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gray-800 bg-opacity-50 divide-y divide-gray-700">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Apr 13, 2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-900 bg-opacity-30 text-green-400">BUY</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Bitcoin (BTC)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">0.0015 BTC</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹4,231,600</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹6,347.40</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-900 bg-opacity-30 text-green-400">Completed</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Apr 12, 2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 text-xs rounded-full bg-red-900 bg-opacity-30 text-red-400">SELL</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Cardano (ADA)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">24 ADA</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹0.63251</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹15.18</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-900 bg-opacity-30 text-green-400">Completed</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Apr 11, 2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-900 bg-opacity-30 text-green-400">BUY</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Solana (SOL)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">0.25 SOL</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹128.42</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹32.11</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-900 bg-opacity-30 text-green-400">Completed</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Apr 10, 2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 text-xs rounded-full bg-red-900 bg-opacity-30 text-red-400">SELL</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Ethereum (ETH)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">0.10 ETH</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹1,642.8</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹164.28</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-900 bg-opacity-30 text-green-400">Completed</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">Apr 10, 2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-900 bg-opacity-30 text-green-400">BUY</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">AVAX</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">2.5 AVAX</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹19.842</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">₹49.61</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-900 bg-opacity-30 text-green-400">Completed</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 bg-opacity-80 border-t border-indigo-900 mt-16 py-8 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-chart-line text-indigo-500 text-2xl"></i>
+                        <span class="text-xl font-bold">CryptoTrend Alpha</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Our proprietary trend-following strategy delivers consistent returns in volatile crypto markets.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Dashboard</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Portfolio</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Daily Actions</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Performance</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Settings</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">
+                        Subscribe to our newsletter for weekly market insights and tips.
+                    </p>
+                    <form>
+                        <div class="flex">
+                            <input type="email" placeholder="Your email" class="w-full bg-gray-800 border border-indigo-900 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <button class="bg-indigo-600 hover:bg-indigo-700 rounded-r-lg px-4 transition">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2025 CryptoTrend Alpha. All rights reserved.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-indigo-400 text-sm transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-indigo-400 text-sm transition">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-indigo-400 text-sm transition">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div class="fixed bottom-4 right-4 bg-green-900 bg-opacity-90 text-green-100 px-4 py-3 rounded-lg shadow-lg flex items-center z-50">
+        <i class="fas fa-check-circle mr-2"></i>
+        <div>
+            <p class="font-medium">System Updated</p>
+            <p class="text-xs">Latest recommendations loaded for April 14</p>
+        </div>
+        <button class="ml-4 text-green-300 hover:text-white">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-95 z-50 hidden">
+        <div class="flex justify-end p-4">
+            <button class="text-2xl text-gray-300">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="flex flex-col items-center text-center space-y-6 p-8">
+            <a href="#" class="text-xl hover:text-indigo-400 transition">Dashboard</a>
+            <a href="#" class="text-xl text-indigo-400 font-medium">Daily Actions</a>
+            <a href="#" class="text-xl hover:text-indigo-400 transition">Portfolio</a>
+            <a href="#" class="text-xl hover:text-indigo-400 transition">Settings</a>
+            <a href="#" class="text-xl hover:text-indigo-400 transition">Help</a>
+        </div>
+    </div>
+</body>
+</html>wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Action</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-
